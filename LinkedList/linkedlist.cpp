@@ -1,7 +1,8 @@
 #include <iostream>
 using namespace std;
 
-class Node {
+class Node
+{
 public:
     int data;
     Node *next;
@@ -12,8 +13,10 @@ public:
         next = nullptr;
     }
 
-    ~Node(){
-        if(next != nullptr){
+    ~Node()
+    {
+        if (next != nullptr)
+        {
             delete next;
             next = nullptr;
         }
@@ -32,8 +35,10 @@ public:
         tail = nullptr;
     }
 
-    ~List() {
-        if(head != nullptr) {
+    ~List()
+    {
+        if (head != nullptr)
+        {
             delete head;
             head = nullptr;
         }
@@ -91,7 +96,84 @@ public:
         newNode->next = temp->next;
         temp->next = newNode;
     }
-    
+
+    void pop_front()
+    {
+        if (head == nullptr)
+        {
+            cout << "Empty ll";
+            return;
+        }
+        Node *temp = head;
+        head = head->next;
+
+        temp->next = nullptr;
+        delete temp;
+    }
+
+    void pop_end()
+    {
+        if (tail == nullptr)
+        {
+            cout << "Empty ll";
+            return;
+        }
+        Node *temp = head;
+        while (temp->next->next != nullptr)
+        {
+            temp = temp->next;
+        }
+        temp->next = nullptr;
+        delete tail;
+        tail = temp;
+    }
+
+    int iterativeSearch(int key)
+    {
+        Node *temp = head;
+        int idx = 0;
+        while (temp->next != nullptr)
+        {
+            if (temp->data == key)
+            {
+                return idx;
+            }
+
+            temp = temp->next;
+            idx++;
+        }
+    }
+
+    int recursiveSearch(int key)
+    {
+    }
+
+    // size - n + 1
+    int findAndRemoveNthNodeFromEnd(int node)
+    {
+        Node *tempIdx = head;
+        int size = 0;
+        while (tempIdx != nullptr)
+        {
+            size++;
+            tempIdx = tempIdx->next;
+        }
+
+        int prevNodePosi = size - node - 1;
+
+        Node *temp = head;
+        for (int i = 0; i < prevNodePosi; i++)
+        {
+            temp = temp->next;
+        }
+
+        Node *del = temp->next;
+        temp->next = del->next;
+        del->next = nullptr;
+        delete del;
+
+        return 1;
+    }
 };
 
 int main()
@@ -104,8 +186,7 @@ int main()
     ll.push_back(4);
     ll.push_back(5);
     ll.push_back(6);
-
-    ll.insert(100,2);
+    ll.findAndRemoveNthNodeFromEnd(3);
     ll.printList();
     return 0;
 }
