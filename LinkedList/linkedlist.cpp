@@ -159,10 +159,11 @@ public:
             tempIdx = tempIdx->next;
         }
 
-        int prevNodePosi = size - node - 1;
+        int nodePosi = size - node +1;
+        int prevNodePosi = nodePosi -1;
 
         Node *temp = head;
-        for (int i = 0; i < prevNodePosi; i++)
+        for (int i = 1; i < prevNodePosi; i++)
         {
             temp = temp->next;
         }
