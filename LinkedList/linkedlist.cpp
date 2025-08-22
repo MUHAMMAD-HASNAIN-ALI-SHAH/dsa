@@ -144,10 +144,6 @@ public:
         }
     }
 
-    int recursiveSearch(int key)
-    {
-    }
-
     // size - n + 1
     int findAndRemoveNthNodeFromEnd(int node)
     {
@@ -159,8 +155,15 @@ public:
             tempIdx = tempIdx->next;
         }
 
-        int nodePosi = size - node +1;
-        int prevNodePosi = nodePosi -1;
+        int nodePosi = size - node + 1;
+        int prevNodePosi = nodePosi - 1;
+
+        if (nodePosi == 1)
+        {
+            Node *del = head;
+            head = head->next;
+            delete del;
+        }
 
         Node *temp = head;
         for (int i = 1; i < prevNodePosi; i++)
@@ -175,7 +178,86 @@ public:
 
         return 1;
     }
+
+    void reverse()
+    {
+        Node *prev = nullptr;
+        Node *curr = head;
+
+        while (curr != NULL)
+        {
+            Node *next = curr->next;
+            curr->next = prev;
+
+            prev = curr;
+            curr = next;
+        }
+
+        head = prev;
+    }
 };
+
+bool isCycle(Node *head)
+{
+    Node *slow = head;
+    Node *fast = head;
+    bool isCycle = false;
+    while (fast != NULL && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast)
+        {
+            isCycle = true;
+            break;
+        }
+    }
+    return isCycle;
+}
+
+void removeCycle(Node *head)
+{
+    Node *slow = head;
+    Node *fast = head;
+    bool isCycle = false;
+    while (fast != NULL && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast)
+        {
+            isCycle = true;
+            break;
+        }
+    }
+    if (!isCycle)
+    {
+        cout << "No cycle detected." << endl;
+    }
+
+    slow = head;
+    if (slow == fast)
+    {
+        while (fast->next != slow)
+        {
+            fast = fast->next;
+        }
+        fast->next = NULL;
+    }
+    else
+    {
+        Node *prev = fast;
+        while (fast != slow)
+        {
+            slow = slow->next;
+            prev = fast;
+            fast = fast->next;
+        }
+        prev->next = NULL;
+    }
+}
 
 int main()
 {
@@ -187,7 +269,13 @@ int main()
     ll.push_back(4);
     ll.push_back(5);
     ll.push_back(6);
-    ll.findAndRemoveNthNodeFromEnd(3);
+    // ll.reverse();
+    // ll.printList();
+    ll.tail->next = ll.head;
+
+    cout << isCycle(ll.head) << endl;
+    removeCycle(ll.head);
     ll.printList();
+
     return 0;
 }
