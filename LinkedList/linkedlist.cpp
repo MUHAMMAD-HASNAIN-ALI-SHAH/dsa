@@ -259,6 +259,84 @@ void removeCycle(Node *head)
     }
 }
 
+void printList(Node *head)
+{
+    Node *temp = head;
+    while (temp != nullptr)
+    {
+        cout << temp->data << " -> ";
+        temp = temp->next;
+    }
+    cout << "NULL" << endl;
+}
+
+Node* splitAtMid(Node* head) {
+    Node* slow = head;
+    Node* fast = head;
+    Node* prev = NULL;
+
+    while (fast != NULL && fast->next != NULL) {
+        prev = slow;
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    if (prev != NULL) {
+        prev->next = NULL; // break the list into two halves
+    }
+
+    return slow; // slow is the start of the right half
+}
+
+Node *reverse(Node *head)
+{
+    Node *prev = nullptr;
+    Node *curr = head;
+
+    while (curr != NULL)
+    {
+        Node *next = curr->next;
+        curr->next = prev;
+
+        prev = curr;
+        curr = next;
+    }
+
+    return prev;
+}
+
+Node *zigZag(Node *head)
+{
+    Node *leftHead = head;
+    Node *rightHead = splitAtMid(head);
+    Node *rightHeadReverse = reverse(rightHead);
+
+    Node *left = leftHead;
+    Node *right = rightHeadReverse;
+    Node *tail = right;
+
+    while (left != NULL && right != NULL)
+    {
+        Node *leftNext = left->next;
+        Node *rightNext = right->next;
+
+        left->next = right;
+        right->next = leftNext;
+
+        tail = right;
+
+        left = leftNext;
+        right = rightNext;
+    }
+
+    if (right != NULL)
+    {
+        tail->next = right;
+    }
+
+    return head;
+}
+
 int main()
 {
     List ll;
@@ -268,14 +346,17 @@ int main()
 
     ll.push_back(4);
     ll.push_back(5);
-    ll.push_back(6);
     // ll.reverse();
     // ll.printList();
-    ll.tail->next = ll.head;
+    // ll.tail->next = ll.head;
 
-    cout << isCycle(ll.head) << endl;
-    removeCycle(ll.head);
+    // cout << isCycle(ll.head) << endl;
+    // removeCycle(ll.head);
     ll.printList();
+
+    ll.head = zigZag(ll.head);
+
+    printList(ll.head);
 
     return 0;
 }
